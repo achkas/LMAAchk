@@ -13,5 +13,8 @@ UCLASS()
 class LEAVEMEALONE_API ALMAGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
+
+	public:
+	ALMAGameModeBase();
 	
 };
