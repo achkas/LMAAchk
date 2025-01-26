@@ -18,7 +18,7 @@ ALMADefaultCharacter::ALMADefaultCharacter()
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArm");
 	SpringArmComponent->SetupAttachment(GetRootComponent());
 	SpringArmComponent->SetUsingAbsoluteRotation(true);
-	SpringArmComponent->TargetArmLength = ArmLength;
+	//SpringArmComponent->TargetArmLength = ArmLength;
 	SpringArmComponent->SetRelativeRotation(FRotator(YRotation, 0.0f, 0.0f));
 	SpringArmComponent->bDoCollisionTest = false;
 	SpringArmComponent->bEnableCameraLag = true;
@@ -29,6 +29,10 @@ ALMADefaultCharacter::ALMADefaultCharacter()
 	CameraComponent->SetFieldOfView(FOV);
 	CameraComponent->bUsePawnControlRotation = false;
 
+	bUseControllerRotationPitch = false;//курсор
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+
 
 
 }
@@ -37,6 +41,11 @@ ALMADefaultCharacter::ALMADefaultCharacter()
 void ALMADefaultCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (CursorMaterial)
+	{
+		CurrentCursor = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), CursorMaterial, CursorSize, FVector(0));
+	}
 	
 }
 
@@ -67,6 +76,7 @@ void ALMADefaultCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ALMADefaultCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ALMADefaultCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("Zoom", this, &ALMADefaultCharacter::Zoom);
 
 }
 
@@ -78,5 +88,11 @@ void ALMADefaultCharacter::MoveForward(float Value)
 void ALMADefaultCharacter::MoveRight(float Value)
 {
 	AddMovementInput(GetActorRightVector(), Value);
+}
+
+void ALMADefaultCharacter::Zoom(float Value)
+{	
+	ArmLength = FMath::Clamp((ArmLength + (Value * ZoomSpeed)), MinArmLength, MaxArmLength);
+	SpringArmComponent->TargetArmLength = ArmLength;		
 }
 

@@ -21,10 +21,10 @@ public:
 protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	USpringArmComponent* SpringArmComponent;
+	USpringArmComponent* SpringArmComponent;//штатив
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	UCameraComponent* CameraComponent;
+	UCameraComponent* CameraComponent;//камера
 
 	UPROPERTY()
 	UDecalComponent* CurrentCursor = nullptr;
@@ -38,10 +38,10 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
+	
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
+	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
@@ -49,9 +49,13 @@ private:
 	float YRotation = -75.0f;//– отвечает за поворот камеры по оси Y.
 	float ArmLength = 1400.0f; // – отвечает за длину штатива.
 	float FOV = 55.0f;		   // – отвечает за поле зрения камеры.
+	float MinArmLength = 300.0f;
+	float MaxArmLength = 2500.0f;
+	float ZoomSpeed = 100.0f;
 
-	void MoveForward(float Value);//	будет отвечать за движение персонажа по оси X.
-	void MoveRight(float Value);//  будет отвечать за движение персонажа по оси Y.
+	void MoveForward(float Value);//движение персонажа по оси X.
+	void MoveRight(float Value);// движение персонажа по оси Y.
+	void Zoom(float Value);//приближение камеры
 
 
 
