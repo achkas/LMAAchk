@@ -8,6 +8,8 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class ULMAHealthComponent;
+class UAnimMontage;
 
 UCLASS()
 class LEAVEMEALONE_API ALMADefaultCharacter : public ACharacter
@@ -18,6 +20,9 @@ public:
 	
 	ALMADefaultCharacter();
 
+	UFUNCTION()
+	ULMAHealthComponent* GetHealthComponent() const { return HealthComponent; }
+
 protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -25,6 +30,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UCameraComponent* CameraComponent;//камера
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components|Health")
+	ULMAHealthComponent* HealthComponent;//здоровье
 
 	UPROPERTY()
 	UDecalComponent* CurrentCursor = nullptr;
@@ -34,6 +42,20 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cursor")
 	FVector CursorSize = FVector(20.0f, 40.0f, 40.0f);
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* DeathMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Components|Stamina")
+	float SprintSpeedMultiplier = 2.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Components|Stamina")
+	float MaxStamina = 100.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Components|Stamina")
+	float StaminaDrainRate = 50.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Components|Stamina")
+	float StaminaRecoveryRate = 10.0f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components|Stamina")
+	bool IsSprinting = false;
 
 	virtual void BeginPlay() override;
 
@@ -57,6 +79,23 @@ private:
 	void MoveRight(float Value);// движение персонажа по оси Y.
 	void Zoom(float Value);//приближение камеры
 
+	void OnDeath();
+	void OnHealthChanged(float NewHealth);
+
+	void RotationPlayerOnCursor();
+
+	/*float SprintSpeed=1000.0f;
+	float NormalSpeed;
+	void StartSprint();
+	void StopSprint();*/
+
+	float DefaultWalkSpeed;
+	float Stamina = 0.0f;
+	bool CanSprint = true;
+
+	void StaminaManager();
+	void StartSprinting();
+	void StopSprinting();
 
 
 
