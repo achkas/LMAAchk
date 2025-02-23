@@ -18,7 +18,7 @@ public:
 	ULMAWeaponComponent();
 
 	void Fire();
-	//void Reload();
+	void Reload();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
@@ -39,8 +39,8 @@ private:
 	bool AnimReloading = false;
 
 	void SpawnWeapon();
-	//void InitAnimNotify();
+	void InitAnimNotify();
 
 	void OnNotifyReloadFinished(USkeletalMeshComponent* SkeletalMesh);
-	//bool CanReload() const;
+	bool CanReload() const;
 };
